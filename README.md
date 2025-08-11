@@ -345,6 +345,6 @@ I'm always excited to discuss algorithms, Go programming, and software engineeri
 
 ---
 
-![Go Gopher](https://golang.org/doc/gopher/frontpage.png)
+<img src="https://github.com/betandr/gophers/blob/master/Gopher.png" alt="Go Gopher" height="300">
 
 </div>
