@@ -6,6 +6,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // RunTerminal is the main function for the Merge Sort user interface.
@@ -53,7 +54,18 @@ func RunTerminal() {
 	printList(head)
 
 	// Call the Merge Sort function from the same package.
+	start := time.Now()
 	sortedList := MergeSort(head)
+	elapsed := time.Since(start)
+
+	// Count items
+	count := 0
+	for n := sortedList; n != nil; n = n.Next {
+		count++
+	}
+	fmt.Printf("Sorted %d items in %v (%d ms)\n", count, elapsed, elapsed.Milliseconds())
+
+	fmt.Printf("Sorted %d items in %v\n", count, elapsed)
 
 	fmt.Println("Sorted List:")
 	printList(sortedList)
