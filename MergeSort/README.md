@@ -85,6 +85,7 @@ Final: [11] -> [12] -> [22] -> [25] -> [34] -> [64] -> [90] -> nil
 MergeSort/
 ├── mergesort.go          # Core algorithm implementation
 ├── mergesort_terminal.go # Interactive terminal interface
+├── mergesort_use_cases.go # Business logic and use cases
 ├── mergesort_test.go     # Comprehensive test suite
 └── README.md            # This documentation
 ```
@@ -225,15 +226,45 @@ package main
 import mergesort "github.com/JoaoVitor615/algorithms-in-go/MergeSort"
 
 func main() {
-    // Launch interactive terminal interface
+    // Launch advanced testing interface
+    mergesort.RunAdvancedInterface()
+    
+    // Or use simple manual input mode
     mergesort.RunTerminal()
 }
 ```
 
-**Sample Terminal Session:**
+**Advanced Testing Interface:**
 ```
-[   Merge Sort   ]
+[   Merge Sort - Advanced Testing   ]
+Choose a testing option:
 
+1. Manual input (enter numbers manually)
+2. Custom random list (specify quantity)
+3. Benchmark 500 random numbers
+4. Benchmark 1,000 random numbers
+5. Benchmark 5,000 random numbers
+6. Benchmark 10,000 random numbers
+7. Run all benchmarks
+8. Back to main menu
+
+Enter your choice (1-8): 2
+
+=== Custom Random List Mode ===
+Enter the number of random numbers to generate (1-1,000,000): 1000
+
+🎲 Generating 1,000 random numbers...
+📝 Random list with 1,000 numbers generated successfully!
+🔄 Starting sort...
+
+✅ Sorting completed in: 45.6µs
+📊 Performance: 1,000 numbers sorted
+⚡ Average time per number: 0.05 μs
+```
+
+**Simple Manual Input Mode:**
+```
+=== Manual Input Mode ===
 Enter numbers one by one and press Enter. To stop and sort, just press Enter on an empty line.
 Enter a number: 64
 Enter a number: 34
@@ -246,6 +277,10 @@ Original List:
 
 Sorted List:
 12 -> 25 -> 34 -> 64 -> nil
+
+✅ Sorting completed in: 1.2µs
+📊 Performance: 4 numbers sorted
+⚡ Average time per number: 0.30 μs
 ```
 
 ### 🔧 **Advanced Usage: Custom Data Types**
@@ -321,10 +356,12 @@ coverage: 43.3% of statements
 
 ### 🖥️ **Terminal Interface Features**
 
-- **User-friendly input**: Enter numbers one by one
-- **Visual feedback**: See before and after states
-- **Error handling**: Invalid inputs are gracefully handled
-- **Educational output**: Clear representation of the sorting process
+- **8 Testing Options**: From manual input to comprehensive benchmarks
+- **Custom Random Generation**: Create lists with 1 to 1,000,000 numbers
+- **Performance Analysis**: Real-time timing and complexity analysis
+- **Visual Feedback**: See before/after states and detailed metrics
+- **Error Handling**: Invalid inputs are gracefully handled
+- **Benchmark Summaries**: Detailed performance comparisons and scaling analysis
 
 ### 🎮 **How to Run**
 
@@ -333,7 +370,7 @@ coverage: 43.3% of statements
 go run main.go
 
 # Select option 1 for Merge Sort
-# Enter your numbers and watch the magic happen!
+# Choose from 8 different testing options!
 ```
 
 ### 📱 **Example Session**
@@ -346,19 +383,47 @@ Please choose an algorithm to execute:
 
 Enter your choice: 1
 
-[   Merge Sort   ]
+[   Merge Sort - Advanced Testing   ]
+Choose a testing option:
 
-Enter numbers one by one and press Enter. To stop and sort, just press Enter on an empty line.
-Enter a number: 42
-Enter a number: 17
-Enter a number: 89
-Enter a number: 3
-Enter a number: 
+1. Manual input (enter numbers manually)
+2. Custom random list (specify quantity)
+3. Benchmark 500 random numbers
+4. Benchmark 1,000 random numbers
+5. Benchmark 5,000 random numbers
+6. Benchmark 10,000 random numbers
+7. Run all benchmarks
+8. Back to main menu
 
-Original List:
-42 -> 17 -> 89 -> 3 -> nil
-Sorted List:
-3 -> 17 -> 42 -> 89 -> nil
+Enter your choice (1-8): 7
+
+=== Running All Benchmarks ===
+This will test MergeSort performance with different input sizes...
+
+[1/4] Generating 500 numbers... Sorting... Done in 24.1µs ✅
+[2/4] Generating 1,000 numbers... Sorting... Done in 49.5µs ✅
+[3/4] Generating 5,000 numbers... Sorting... Done in 304.7µs ✅
+[4/4] Generating 10,000 numbers... Sorting... Done in 637.2µs ✅
+
+============================================================
+               BENCHMARK SUMMARY
+============================================================
+Count        Time            μs/number       Status    
+------------------------------------------------------------
+500          24.1µs          0.05            ✅         
+1,000        49.5µs          0.05            ✅         
+5,000        304.7µs         0.06            ✅         
+10,000       637.2µs         0.06            ✅         
+============================================================
+
+📊 SCALING ANALYSIS:
+   500 → 1,000: 2.00x size, 2.06x time
+   1,000 → 5,000: 5.00x size, 6.16x time
+   5,000 → 10,000: 2.00x size, 2.09x time
+
+💡 Note: MergeSort has O(n log n) complexity.
+   Expected time ratio for 2x size: ~2.2x time
+   Expected time ratio for 10x size: ~33x time
 ```
 
 ---

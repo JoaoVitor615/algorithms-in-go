@@ -188,7 +188,40 @@ func main() {
     fmt.Println("Sorted List:")
     printList(sortedHead) // Output: 12 -> 25 -> 34 -> 64 -> nil
 }
+
+func printList(node *mergesort.Node) {
+    for node != nil {
+        fmt.Printf("%d -> ", node.Value)
+        node = node.Next
+    }
+    fmt.Println("nil")
+}
 ```
+
+### Advanced Testing Interface
+
+The project includes an advanced testing interface with multiple options:
+
+```go
+package main
+
+import mergesort "github.com/JoaoVitor615/algorithms-in-go/MergeSort"
+
+func main() {
+    // Launch advanced testing interface
+    mergesort.RunAdvancedInterface()
+}
+```
+
+**Available Testing Options:**
+1. **Manual Input** - Enter numbers manually
+2. **Custom Random** - Generate 1 to 1,000,000 random numbers
+3. **Benchmark 500** - Test with 500 random numbers
+4. **Benchmark 1,000** - Test with 1,000 random numbers  
+5. **Benchmark 5,000** - Test with 5,000 random numbers
+6. **Benchmark 10,000** - Test with 10,000 random numbers
+7. **Run All Benchmarks** - Complete performance analysis
+8. **Back to Main Menu** - Return to algorithm selection
 
 ### Using Individual Algorithms
 
@@ -197,6 +230,9 @@ import "github.com/JoaoVitor615/algorithms-in-go/MergeSort"
 
 // Use MergeSort directly
 sortedList := mergesort.MergeSort(yourLinkedList)
+
+// Or use the simple terminal interface (legacy)
+mergesort.RunTerminal()
 ```
 
 ---
