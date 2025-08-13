@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/JoaoVitor615/algorithms-in-go/sorting/merge_sort"
+	"github.com/JoaoVitor615/algorithms-in-go/sorting/quick_sort"
 )
 
 // UseCase represents the business logic layer for sorting operations
@@ -18,11 +19,13 @@ func NewUseCase() *UseCase {
 
 // SortResult contains the result of a sorting operation
 type SortResult struct {
-	SortedList   *merge_sort.Node
+	SortedList   *merge_sort.Node // For linked list algorithms
+	SortedArray  []int           // For array algorithms
 	Duration     time.Duration
 	Count        int
 	IsSorted     bool
 	Analysis     PerformanceAnalysis
+	IsArray      bool             // Flag to indicate if result is array or linked list
 }
 
 // PerformanceAnalysis contains performance metrics
@@ -57,44 +60,85 @@ type ScalingAnalysis struct {
 func (uc *UseCase) ManualSort(algorithmName string, numbers []int) SortResult {
 	if len(numbers) == 0 {
 		return SortResult{
-			SortedList: nil,
-			Duration:   0,
-			Count:      0,
-			IsSorted:   true,
-			Analysis:   PerformanceAnalysis{},
+			SortedList:  nil,
+			SortedArray: []int{},
+			Duration:    0,
+			Count:       0,
+			IsSorted:    true,
+			Analysis:    PerformanceAnalysis{},
+			IsArray:     uc.algorithmUsesArray(algorithmName),
 		}
 	}
 
-	head := uc.createListFromSlice(numbers)
 	count := len(numbers)
-	
 	startTime := time.Now()
-	sortedList := uc.executeSort(algorithmName, head)
-	duration := time.Since(startTime)
+	
+	if uc.algorithmUsesArray(algorithmName) {
+		// Array-based algorithms
+		sortedArray := uc.executeSortArray(algorithmName, numbers)
+		duration := time.Since(startTime)
+		
+		return SortResult{
+			SortedList:  nil,
+			SortedArray: sortedArray,
+			Duration:    duration,
+			Count:       count,
+			IsSorted:    uc.verifySortedArray(sortedArray),
+			Analysis:    uc.calculateAnalysis(count, duration),
+			IsArray:     true,
+		}
+	} else {
+		// Linked list algorithms
+		head := uc.createListFromSlice(numbers)
+		sortedList := uc.executeSortList(algorithmName, head)
+		duration := time.Since(startTime)
 
-	return SortResult{
-		SortedList: sortedList,
-		Duration:   duration,
-		Count:      count,
-		IsSorted:   uc.verifySorted(sortedList),
-		Analysis:   uc.calculateAnalysis(count, duration),
+		return SortResult{
+			SortedList:  sortedList,
+			SortedArray: nil,
+			Duration:    duration,
+			Count:       count,
+			IsSorted:    uc.verifySorted(sortedList),
+			Analysis:    uc.calculateAnalysis(count, duration),
+			IsArray:     false,
+		}
 	}
 }
 
 // CustomRandomSort generates and sorts a random list of specified size
 func (uc *UseCase) CustomRandomSort(algorithmName string, count int) SortResult {
-	head := uc.generateRandomList(count)
-	
 	startTime := time.Now()
-	sortedList := uc.executeSort(algorithmName, head)
-	duration := time.Since(startTime)
+	
+	if uc.algorithmUsesArray(algorithmName) {
+		// Array-based algorithms
+		numbers := uc.generateRandomSlice(count)
+		sortedArray := uc.executeSortArray(algorithmName, numbers)
+		duration := time.Since(startTime)
+		
+		return SortResult{
+			SortedList:  nil,
+			SortedArray: sortedArray,
+			Duration:    duration,
+			Count:       count,
+			IsSorted:    uc.verifySortedArray(sortedArray),
+			Analysis:    uc.calculateAnalysis(count, duration),
+			IsArray:     true,
+		}
+	} else {
+		// Linked list algorithms
+		head := uc.generateRandomList(count)
+		sortedList := uc.executeSortList(algorithmName, head)
+		duration := time.Since(startTime)
 
-	return SortResult{
-		SortedList: sortedList,
-		Duration:   duration,
-		Count:      count,
-		IsSorted:   uc.verifySorted(sortedList),
-		Analysis:   uc.calculateAnalysis(count, duration),
+		return SortResult{
+			SortedList:  sortedList,
+			SortedArray: nil,
+			Duration:    duration,
+			Count:       count,
+			IsSorted:    uc.verifySorted(sortedList),
+			Analysis:    uc.calculateAnalysis(count, duration),
+			IsArray:     false,
+		}
 	}
 }
 
@@ -140,13 +184,36 @@ func (uc *UseCase) GetListPartial(head *merge_sort.Node, maxCount int) []int {
 	return result
 }
 
-// executeSort dispatches to the appropriate sorting algorithm
-func (uc *UseCase) executeSort(algorithmName string, head *merge_sort.Node) *merge_sort.Node {
+// algorithmUsesArray determines if an algorithm works with arrays or linked lists
+func (uc *UseCase) algorithmUsesArray(algorithmName string) bool {
+	switch algorithmName {
+	case "Quick Sort", "Heap Sort", "Bubble Sort", "Insertion Sort":
+		return true
+	case "Merge Sort":
+		return false
+	default:
+		return false // Default to linked list
+	}
+}
+
+// executeSortArray dispatches to array-based sorting algorithms
+func (uc *UseCase) executeSortArray(algorithmName string, arr []int) []int {
+	switch algorithmName {
+	case "Quick Sort":
+		return quick_sort.QuickSort(arr)
+	default:
+		// For future array algorithms, we'll add cases here
+		return quick_sort.QuickSort(arr) // Default fallback
+	}
+}
+
+// executeSortList dispatches to linked list sorting algorithms
+func (uc *UseCase) executeSortList(algorithmName string, head *merge_sort.Node) *merge_sort.Node {
 	switch algorithmName {
 	case "Merge Sort":
 		return merge_sort.MergeSort(head)
 	default:
-		// For future algorithms, we'll add cases here
+		// For future linked list algorithms, we'll add cases here
 		return merge_sort.MergeSort(head) // Default fallback
 	}
 }
@@ -188,6 +255,22 @@ func (uc *UseCase) generateRandomList(count int) *merge_sort.Node {
 	return head
 }
 
+// generateRandomSlice creates a slice with random numbers from 1 to 1000
+func (uc *UseCase) generateRandomSlice(count int) []int {
+	if count <= 0 {
+		return []int{}
+	}
+
+	rand.Seed(time.Now().UnixNano())
+	result := make([]int, count)
+	
+	for i := 0; i < count; i++ {
+		result[i] = rand.Intn(1000) + 1
+	}
+
+	return result
+}
+
 // verifySorted checks if a linked list is correctly sorted
 func (uc *UseCase) verifySorted(head *merge_sort.Node) bool {
 	if head == nil || head.Next == nil {
@@ -200,6 +283,21 @@ func (uc *UseCase) verifySorted(head *merge_sort.Node) bool {
 			return false
 		}
 		current = current.Next
+	}
+
+	return true
+}
+
+// verifySortedArray checks if an array is correctly sorted
+func (uc *UseCase) verifySortedArray(arr []int) bool {
+	if len(arr) <= 1 {
+		return true
+	}
+
+	for i := 0; i < len(arr)-1; i++ {
+		if arr[i] > arr[i+1] {
+			return false
+		}
 	}
 
 	return true

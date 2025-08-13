@@ -65,7 +65,7 @@ This repository aims to:
 | Algorithm | Time Complexity | Space Complexity | Stable | Status |
 |-----------|----------------|------------------|--------|---------|
 | **Merge Sort** | O(n log n) | O(n) | ✅ | ✅ Implemented |
-| Quick Sort | O(n log n) avg, O(n²) worst | O(log n) | ❌ | 🔄 Coming Soon |
+| **Quick Sort** | O(n log n) avg, O(n²) worst | O(log n) | ❌ | ✅ Implemented |
 | Heap Sort | O(n log n) | O(1) | ❌ | 🔄 Coming Soon |
 | Bubble Sort | O(n²) | O(1) | ✅ | 🔄 Coming Soon |
 | Insertion Sort | O(n²) | O(1) | ✅ | 🔄 Coming Soon |
@@ -167,7 +167,7 @@ Enter your choice: 1
 Choose a sorting algorithm:
 
 1. Merge Sort
-2. Quick Sort (Coming Soon)
+2. Quick Sort
 3. Heap Sort (Coming Soon)
 4. Bubble Sort (Coming Soon)
 5. Insertion Sort (Coming Soon)
@@ -184,6 +184,7 @@ package main
 import (
     "fmt"
     "github.com/JoaoVitor615/algorithms-in-go/sorting/merge_sort"
+    "github.com/JoaoVitor615/algorithms-in-go/sorting/quick_sort"
 )
 
 func main() {
@@ -196,11 +197,18 @@ func main() {
     fmt.Println("Original List:")
     printList(head) // Output: 64 -> 34 -> 25 -> 12 -> nil
 
-    // Sort the list using Merge Sort
+    // Sort the list using Merge Sort (Linked Lists)
     sortedHead := merge_sort.MergeSort(head)
 
-    fmt.Println("Sorted List:")
+    fmt.Println("Sorted List (Merge Sort):")
     printList(sortedHead) // Output: 12 -> 25 -> 34 -> 64 -> nil
+    
+    // Sort an array using Quick Sort
+    arr := []int{64, 34, 25, 12, 22, 11, 90}
+    sortedArr := quick_sort.QuickSort(arr)
+    
+    fmt.Println("Sorted Array (Quick Sort):")
+    fmt.Println(sortedArr) // Output: [11 12 22 25 34 64 90]
 }
 
 func printList(node *merge_sort.Node) {

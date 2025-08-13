@@ -47,7 +47,9 @@ func (t *Terminal) showSortingMenu() {
 	switch choice {
 	case "1":
 		t.showAlgorithmMenu("Merge Sort")
-	case "2", "3", "4", "5":
+	case "2":
+		t.showAlgorithmMenu("Quick Sort")
+	case "3", "4", "5":
 		fmt.Println("This algorithm is coming soon! Stay tuned. 🚀")
 		t.showSortingMenu()
 	case "6":
@@ -109,11 +111,19 @@ func (t *Terminal) runManualInput(algorithmName string) {
 
 	result := t.useCase.ManualSort(algorithmName, numbers)
 
-	fmt.Println("\nOriginal List:")
-	t.printSlice(numbers)
+	if result.IsArray {
+		fmt.Println("\nOriginal Array:")
+		t.printSlice(numbers)
 
-	fmt.Println("Sorted List:")
-	t.printList(result.SortedList)
+		fmt.Println("Sorted Array:")
+		t.printSlice(result.SortedArray)
+	} else {
+		fmt.Println("\nOriginal List:")
+		t.printSlice(numbers)
+
+		fmt.Println("Sorted List:")
+		t.printList(result.SortedList)
+	}
 
 	t.printPerformanceInfo(result)
 }
@@ -214,12 +224,20 @@ func (t *Terminal) askToShowList(result SortResult, count int) {
 	if count <= 50 {
 		if t.askYesNo("\nDo you want to see the sorted list? (y/n): ") {
 			fmt.Println("\nSorted List:")
-			t.printList(result.SortedList)
+			if result.IsArray {
+				t.printSlice(result.SortedArray)
+			} else {
+				t.printList(result.SortedList)
+			}
 		}
 	} else if count <= 1000 {
 		if t.askYesNo("\nDo you want to see the first 20 numbers of the sorted list? (y/n): ") {
 			fmt.Println("\nFirst 20 numbers of sorted list:")
-			t.printListPartial(result.SortedList, 20)
+			if result.IsArray {
+				t.printSlicePartial(result.SortedArray, 20)
+			} else {
+				t.printListPartial(result.SortedList, 20)
+			}
 		}
 	}
 }
@@ -231,13 +249,14 @@ func (t *Terminal) askYesNo(prompt string) bool {
 }
 
 func (t *Terminal) printSlice(numbers []int) {
+	fmt.Print("[")
 	for i, num := range numbers {
 		if i > 0 {
-			fmt.Print(" -> ")
+			fmt.Print(", ")
 		}
 		fmt.Print(num)
 	}
-	fmt.Println(" -> nil")
+	fmt.Println("]")
 }
 
 func (t *Terminal) printList(node *merge_sort.Node) {
@@ -260,6 +279,27 @@ func (t *Terminal) printListPartial(node *merge_sort.Node, maxCount int) {
 		fmt.Println("... (and more)")
 	} else {
 		fmt.Println("nil")
+	}
+}
+
+func (t *Terminal) printSlicePartial(arr []int, maxCount int) {
+	count := maxCount
+	if len(arr) < maxCount {
+		count = len(arr)
+	}
+	
+	fmt.Print("[")
+	for i := 0; i < count; i++ {
+		if i > 0 {
+			fmt.Print(", ")
+		}
+		fmt.Print(arr[i])
+	}
+	
+	if len(arr) > maxCount {
+		fmt.Println(", ... (and more)]")
+	} else {
+		fmt.Println("]")
 	}
 }
 

@@ -67,7 +67,7 @@ sorting/
 | Algorithm | Time Complexity | Space Complexity | Stable | Status |
 |-----------|----------------|------------------|--------|---------|
 | **Merge Sort** | O(n log n) | O(log n) | ✅ Yes | ✅ Implemented |
-| **Quick Sort** | O(n log n) avg, O(n²) worst | O(log n) | ❌ No | 🔄 Coming Soon |
+| **Quick Sort** | O(n log n) avg, O(n²) worst | O(log n) | ❌ No | ✅ Implemented |
 | **Heap Sort** | O(n log n) | O(1) | ❌ No | 🔄 Coming Soon |
 | **Bubble Sort** | O(n²) | O(1) | ✅ Yes | 🔄 Coming Soon |
 | **Insertion Sort** | O(n²) | O(1) | ✅ Yes | 🔄 Coming Soon |
@@ -76,9 +76,17 @@ sorting/
 
 #### ✅ **Merge Sort**
 - **Type**: Divide and conquer
-- **Best for**: Large datasets, stable sorting requirements
+- **Data Structure**: Linked lists
+- **Best for**: Large datasets, stable sorting requirements, external sorting
 - **Implementation**: Linked list based for optimal memory usage
 - **Features**: Performance analysis, benchmarking, visualization
+
+#### ✅ **Quick Sort**
+- **Type**: Divide and conquer with partitioning
+- **Data Structure**: Arrays
+- **Best for**: General purpose sorting, average case performance
+- **Implementation**: In-place partitioning with configurable pivot strategies
+- **Features**: Multiple pivot strategies, performance analysis, benchmarking
 
 ---
 
@@ -90,17 +98,23 @@ sorting/
 package main
 
 import (
-    "github.com/JoaoVitor615/algorithms-in-go/sorting"
+    "fmt"
     "github.com/JoaoVitor615/algorithms-in-go/sorting/merge_sort"
+    "github.com/JoaoVitor615/algorithms-in-go/sorting/quick_sort"
 )
 
 func main() {
-    // Direct algorithm usage
+    // Merge Sort (Linked Lists)
     head := &merge_sort.Node{Value: 64}
     head.Next = &merge_sort.Node{Value: 34}
     head.Next.Next = &merge_sort.Node{Value: 25}
     
     sortedHead := merge_sort.MergeSort(head)
+    
+    // Quick Sort (Arrays)
+    arr := []int{64, 34, 25, 12, 22, 11, 90}
+    sortedArr := quick_sort.QuickSort(arr)
+    fmt.Println(sortedArr) // [11 12 22 25 34 64 90]
 }
 ```
 
@@ -137,15 +151,15 @@ The sorting interface provides 8 different testing modes:
 Choose a sorting algorithm:
 
 1. Merge Sort
-2. Quick Sort (Coming Soon)
+2. Quick Sort
 3. Heap Sort (Coming Soon)
 4. Bubble Sort (Coming Soon)
 5. Insertion Sort (Coming Soon)
 6. Back to main menu
 
-Enter your choice (1-6): 1
+Enter your choice (1-6): 2
 
-[   Merge Sort - Advanced Testing   ]
+[   Quick Sort - Advanced Testing   ]
 Choose a testing option:
 
 1. Manual input (enter numbers manually)
@@ -159,7 +173,7 @@ Choose a testing option:
 
 Enter your choice (1-8): 7
 
-=== Merge Sort - Running All Benchmarks ===
+=== Quick Sort - Running All Benchmarks ===
 This will test sorting performance with different input sizes...
 
 [1/4] Generating 500 numbers... Sorting... Done in 24.1µs ✅
