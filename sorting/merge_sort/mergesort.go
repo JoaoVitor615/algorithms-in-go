@@ -1,4 +1,4 @@
-package mergesort
+package merge_sort
 
 // Node represents a node in the linked list.
 type Node struct {

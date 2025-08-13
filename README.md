@@ -155,41 +155,55 @@ go run main.go
 **Sample Output:**
 ```
 Welcome to the Algorithms-in-Go Terminal! 🚀
-Please choose an algorithm to execute:
-1. Merge Sort
-2. (Other algorithms will go here)
+Please choose a category to execute:
+1. Sorting Algorithms
+2. Search Algorithms (Coming Soon)
+3. Data Structures (Coming Soon)
+4. Dynamic Programming (Coming Soon)
 
 Enter your choice: 1
+
+[   Sorting Algorithms - Advanced Testing   ]
+Choose a sorting algorithm:
+
+1. Merge Sort
+2. Quick Sort (Coming Soon)
+3. Heap Sort (Coming Soon)
+4. Bubble Sort (Coming Soon)
+5. Insertion Sort (Coming Soon)
+6. Back to main menu
+
+Enter your choice (1-6): 1
 ```
 
-### Merge Sort Example
+### Sorting Algorithms Example
 
 ```go
 package main
 
 import (
     "fmt"
-    mergesort "github.com/JoaoVitor615/algorithms-in-go/MergeSort"
+    "github.com/JoaoVitor615/algorithms-in-go/sorting/merge_sort"
 )
 
 func main() {
     // Create a linked list: 64 -> 34 -> 25 -> 12 -> nil
-    head := &mergesort.Node{Value: 64}
-    head.Next = &mergesort.Node{Value: 34}
-    head.Next.Next = &mergesort.Node{Value: 25}
-    head.Next.Next.Next = &mergesort.Node{Value: 12}
+    head := &merge_sort.Node{Value: 64}
+    head.Next = &merge_sort.Node{Value: 34}
+    head.Next.Next = &merge_sort.Node{Value: 25}
+    head.Next.Next.Next = &merge_sort.Node{Value: 12}
 
     fmt.Println("Original List:")
     printList(head) // Output: 64 -> 34 -> 25 -> 12 -> nil
 
-    // Sort the list
-    sortedHead := mergesort.MergeSort(head)
+    // Sort the list using Merge Sort
+    sortedHead := merge_sort.MergeSort(head)
 
     fmt.Println("Sorted List:")
     printList(sortedHead) // Output: 12 -> 25 -> 34 -> 64 -> nil
 }
 
-func printList(node *mergesort.Node) {
+func printList(node *merge_sort.Node) {
     for node != nil {
         fmt.Printf("%d -> ", node.Value)
         node = node.Next
@@ -205,11 +219,11 @@ The project includes an advanced testing interface with multiple options:
 ```go
 package main
 
-import mergesort "github.com/JoaoVitor615/algorithms-in-go/MergeSort"
+import "github.com/JoaoVitor615/algorithms-in-go/sorting"
 
 func main() {
-    // Launch advanced testing interface
-    mergesort.RunAdvancedInterface()
+    // Launch sorting algorithms interface
+    sorting.RunSortingInterface()
 }
 ```
 
@@ -221,18 +235,15 @@ func main() {
 5. **Benchmark 5,000** - Test with 5,000 random numbers
 6. **Benchmark 10,000** - Test with 10,000 random numbers
 7. **Run All Benchmarks** - Complete performance analysis
-8. **Back to Main Menu** - Return to algorithm selection
+8. **Back to Menu** - Return to algorithm selection
 
 ### Using Individual Algorithms
 
 ```go
-import "github.com/JoaoVitor615/algorithms-in-go/MergeSort"
+import "github.com/JoaoVitor615/algorithms-in-go/sorting/merge_sort"
 
-// Use MergeSort directly
-sortedList := mergesort.MergeSort(yourLinkedList)
-
-// Or use the simple terminal interface (legacy)
-mergesort.RunTerminal()
+// Use any sorting algorithm directly
+sortedList := merge_sort.MergeSort(yourLinkedList)
 ```
 
 ---
@@ -252,7 +263,7 @@ go test -cover ./...
 go test -coverprofile=coverage.out ./... && go tool cover -html=coverage.out
 
 # Run specific package tests
-go test ./MergeSort -v
+go test ./sorting/merge_sort -v
 ```
 
 **Current Test Coverage:**
@@ -282,7 +293,7 @@ go test ./MergeSort -v
 **Benchmarking:**
 ```bash
 # Run performance benchmarks
-go test -bench=. ./MergeSort
+go test -bench=. ./sorting/merge_sort
 ```
 
 ---

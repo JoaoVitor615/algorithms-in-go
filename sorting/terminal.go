@@ -1,4 +1,4 @@
-package mergesort
+package sorting
 
 import (
 	"bufio"
@@ -6,9 +6,11 @@ import (
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/JoaoVitor615/algorithms-in-go/sorting/merge_sort"
 )
 
-// Terminal handles all user interface interactions
+// Terminal handles all user interface interactions for sorting algorithms
 type Terminal struct {
 	useCase *UseCase
 	reader  *bufio.Reader
@@ -22,20 +24,42 @@ func NewTerminal() *Terminal {
 	}
 }
 
-// RunAdvancedInterface provides the main interface for MergeSort testing
-func RunAdvancedInterface() {
+// RunSortingInterface provides the main interface for sorting algorithm testing
+func RunSortingInterface() {
 	terminal := NewTerminal()
-	terminal.showMainMenu()
+	terminal.showSortingMenu()
 }
 
-// RunTerminal provides the original simple interface (legacy compatibility)
-func RunTerminal() {
-	terminal := NewTerminal()
-	terminal.runManualInput()
+func (t *Terminal) showSortingMenu() {
+	fmt.Println("\n\n[   Sorting Algorithms - Advanced Testing   ]")
+	fmt.Println("Choose a sorting algorithm:")
+	fmt.Println()
+	fmt.Println("1. Merge Sort")
+	fmt.Println("2. Quick Sort (Coming Soon)")
+	fmt.Println("3. Heap Sort (Coming Soon)")
+	fmt.Println("4. Bubble Sort (Coming Soon)")
+	fmt.Println("5. Insertion Sort (Coming Soon)")
+	fmt.Println("6. Back to main menu")
+	fmt.Println()
+
+	choice := t.getMenuChoice("Enter your choice (1-6): ")
+
+	switch choice {
+	case "1":
+		t.showAlgorithmMenu("Merge Sort")
+	case "2", "3", "4", "5":
+		fmt.Println("This algorithm is coming soon! Stay tuned. 🚀")
+		t.showSortingMenu()
+	case "6":
+		return
+	default:
+		fmt.Println("Invalid choice. Please select a valid option (1-6).")
+		t.showSortingMenu()
+	}
 }
 
-func (t *Terminal) showMainMenu() {
-	fmt.Println("\n\n[   Merge Sort - Advanced Testing   ]")
+func (t *Terminal) showAlgorithmMenu(algorithmName string) {
+	fmt.Printf("\n\n[   %s - Advanced Testing   ]\n", algorithmName)
 	fmt.Println("Choose a testing option:")
 	fmt.Println()
 	fmt.Println("1. Manual input (enter numbers manually)")
@@ -45,35 +69,36 @@ func (t *Terminal) showMainMenu() {
 	fmt.Println("5. Benchmark 5,000 random numbers")
 	fmt.Println("6. Benchmark 10,000 random numbers")
 	fmt.Println("7. Run all benchmarks")
-	fmt.Println("8. Back to main menu")
+	fmt.Println("8. Back to sorting menu")
 	fmt.Println()
 
 	choice := t.getMenuChoice("Enter your choice (1-8): ")
 
 	switch choice {
 	case "1":
-		t.runManualInput()
+		t.runManualInput(algorithmName)
 	case "2":
-		t.runCustomRandom()
+		t.runCustomRandom(algorithmName)
 	case "3":
-		t.runBenchmark(500)
+		t.runBenchmark(algorithmName, 500)
 	case "4":
-		t.runBenchmark(1000)
+		t.runBenchmark(algorithmName, 1000)
 	case "5":
-		t.runBenchmark(5000)
+		t.runBenchmark(algorithmName, 5000)
 	case "6":
-		t.runBenchmark(10000)
+		t.runBenchmark(algorithmName, 10000)
 	case "7":
-		t.runAllBenchmarks()
+		t.runAllBenchmarks(algorithmName)
 	case "8":
-		return
+		t.showSortingMenu()
 	default:
 		fmt.Println("Invalid choice. Please select a valid option (1-8).")
+		t.showAlgorithmMenu(algorithmName)
 	}
 }
 
-func (t *Terminal) runManualInput() {
-	fmt.Println("\n=== Manual Input Mode ===")
+func (t *Terminal) runManualInput(algorithmName string) {
+	fmt.Printf("\n=== %s - Manual Input Mode ===\n", algorithmName)
 	fmt.Println("Enter numbers one by one and press Enter. To stop and sort, just press Enter on an empty line.")
 
 	numbers := t.collectNumbers()
@@ -82,12 +107,10 @@ func (t *Terminal) runManualInput() {
 		return
 	}
 
-	head := t.useCase.CreateListFromSlice(numbers)
-	
-	fmt.Println("\nOriginal List:")
-	t.printList(head)
+	result := t.useCase.ManualSort(algorithmName, numbers)
 
-	result := t.useCase.ManualSort(head)
+	fmt.Println("\nOriginal List:")
+	t.printSlice(numbers)
 
 	fmt.Println("Sorted List:")
 	t.printList(result.SortedList)
@@ -95,8 +118,8 @@ func (t *Terminal) runManualInput() {
 	t.printPerformanceInfo(result)
 }
 
-func (t *Terminal) runCustomRandom() {
-	fmt.Println("\n=== Custom Random List Mode ===")
+func (t *Terminal) runCustomRandom(algorithmName string) {
+	fmt.Printf("\n=== %s - Custom Random List Mode ===\n", algorithmName)
 	
 	count := t.getNumber("Enter the number of random numbers to generate (1-1,000,000): ", 1, 1000000)
 	if count == -1 {
@@ -105,7 +128,7 @@ func (t *Terminal) runCustomRandom() {
 
 	fmt.Printf("\n🎲 Generating %s random numbers...\n", t.formatNumber(count))
 	
-	result := t.useCase.CustomRandomSort(count)
+	result := t.useCase.CustomRandomSort(algorithmName, count)
 
 	fmt.Printf("📝 Random list with %s numbers generated successfully!\n", t.formatNumber(count))
 	fmt.Println("🔄 Starting sort...")
@@ -114,12 +137,12 @@ func (t *Terminal) runCustomRandom() {
 	t.askToShowList(result, count)
 }
 
-func (t *Terminal) runBenchmark(count int) {
-	fmt.Printf("\n=== Benchmark: %s Random Numbers ===\n", t.formatNumber(count))
+func (t *Terminal) runBenchmark(algorithmName string, count int) {
+	fmt.Printf("\n=== %s Benchmark: %s Random Numbers ===\n", algorithmName, t.formatNumber(count))
 	
 	fmt.Printf("🎲 Generating %s random numbers...\n", t.formatNumber(count))
 	
-	result := t.useCase.BenchmarkSort(count)
+	result := t.useCase.BenchmarkSort(algorithmName, count)
 
 	fmt.Printf("📝 List with %s numbers generated successfully!\n", t.formatNumber(count))
 	fmt.Println("🔄 Starting sort...")
@@ -127,12 +150,12 @@ func (t *Terminal) runBenchmark(count int) {
 	t.printDetailedPerformance(result)
 }
 
-func (t *Terminal) runAllBenchmarks() {
-	fmt.Println("\n=== Running All Benchmarks ===")
-	fmt.Println("This will test MergeSort performance with different input sizes...")
+func (t *Terminal) runAllBenchmarks(algorithmName string) {
+	fmt.Printf("\n=== %s - Running All Benchmarks ===\n", algorithmName)
+	fmt.Println("This will test sorting performance with different input sizes...")
 	fmt.Println()
 
-	summary := t.useCase.RunAllBenchmarks()
+	summary := t.useCase.RunAllBenchmarks(algorithmName)
 	
 	for i, result := range summary.Results {
 		fmt.Printf("[%d/%d] Generating %s numbers... Sorting... Done in %v ✅\n", 
@@ -207,7 +230,17 @@ func (t *Terminal) askYesNo(prompt string) bool {
 	return strings.ToLower(strings.TrimSpace(response)) == "y"
 }
 
-func (t *Terminal) printList(node *Node) {
+func (t *Terminal) printSlice(numbers []int) {
+	for i, num := range numbers {
+		if i > 0 {
+			fmt.Print(" -> ")
+		}
+		fmt.Print(num)
+	}
+	fmt.Println(" -> nil")
+}
+
+func (t *Terminal) printList(node *merge_sort.Node) {
 	current := node
 	for current != nil {
 		fmt.Printf("%d -> ", current.Value)
@@ -216,7 +249,7 @@ func (t *Terminal) printList(node *Node) {
 	fmt.Println("nil")
 }
 
-func (t *Terminal) printListPartial(node *Node, maxCount int) {
+func (t *Terminal) printListPartial(node *merge_sort.Node, maxCount int) {
 	partial := t.useCase.GetListPartial(node, maxCount)
 	
 	for _, value := range partial {
@@ -283,9 +316,8 @@ func (t *Terminal) displayBenchmarkSummary(summary BenchmarkSummary) {
 				scale.TimeRatio)
 		}
 		
-		fmt.Println("\n💡 Note: MergeSort has O(n log n) complexity.")
-		fmt.Println("   Expected time ratio for 2x size: ~2.2x time")
-		fmt.Println("   Expected time ratio for 10x size: ~33x time")
+		fmt.Println("\n💡 Note: Performance depends on the algorithm complexity.")
+		fmt.Println("   For O(n log n) algorithms: Expected time ratio for 2x size: ~2.2x time")
 	}
 }
 

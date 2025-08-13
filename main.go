@@ -3,14 +3,16 @@ package main
 import (
 	"fmt"
 
-	mergesort "github.com/JoaoVitor615/algorithms-in-go/MergeSort"
+	"github.com/JoaoVitor615/algorithms-in-go/sorting"
 )
 
 func main() {
 	fmt.Println("Welcome to the Algorithms-in-Go Terminal! 🚀")
-	fmt.Println("Please choose an algorithm to execute:")
-	fmt.Println("1. Merge Sort")
-	fmt.Println("2. (Other algorithms will go here)")
+	fmt.Println("Please choose a category to execute:")
+	fmt.Println("1. Sorting Algorithms")
+	fmt.Println("2. Search Algorithms (Coming Soon)")
+	fmt.Println("3. Data Structures (Coming Soon)")
+	fmt.Println("4. Dynamic Programming (Coming Soon)")
 
 	var choice string
 	fmt.Print("\nEnter your choice: ")
@@ -22,7 +24,9 @@ func main() {
 
 	switch choice {
 	case "1":
-		mergesort.RunAdvancedInterface()
+		sorting.RunSortingInterface()
+	case "2", "3", "4":
+		fmt.Println("This category is coming soon! Stay tuned. 🚀")
 	default:
 		fmt.Println("Invalid choice. Please select a valid option.")
 	}
