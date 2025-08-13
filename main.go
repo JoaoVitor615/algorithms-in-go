@@ -22,7 +22,7 @@ func main() {
 
 	switch choice {
 	case "1":
-		mergesort.RunBenchmarkTerminal()
+		mergesort.RunAdvancedInterface()
 	default:
 		fmt.Println("Invalid choice. Please select a valid option.")
 	}
