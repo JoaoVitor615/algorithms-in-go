@@ -1,20 +1,23 @@
 package sorting
 
 import (
-	"math"
-	"math/rand"
 	"time"
 
+	"github.com/JoaoVitor615/algorithms-in-go/pkg"
 	"github.com/JoaoVitor615/algorithms-in-go/sorting/merge_sort"
 	"github.com/JoaoVitor615/algorithms-in-go/sorting/quick_sort"
 )
 
 // UseCase represents the business logic layer for sorting operations
-type UseCase struct{}
+type UseCase struct{
+	generator *pkg.RandomGenerator
+}
 
 // NewUseCase creates a new UseCase instance
 func NewUseCase() *UseCase {
-	return &UseCase{}
+	return &UseCase{
+		generator: pkg.NewRandomGenerator(),
+	}
 }
 
 // SortResult contains the result of a sorting operation
@@ -24,37 +27,14 @@ type SortResult struct {
 	Duration     time.Duration
 	Count        int
 	IsSorted     bool
-	Analysis     PerformanceAnalysis
+	Analysis     pkg.PerformanceAnalysis
 	IsArray      bool             // Flag to indicate if result is array or linked list
 }
 
-// PerformanceAnalysis contains performance metrics
-type PerformanceAnalysis struct {
-	TimePerNumber       float64 // microseconds per number
-	TheoreticalOps      float64 // O(n log n) operations
-	TimePerOperation    float64 // nanoseconds per operation
-}
-
-// BenchmarkSummary contains results from multiple benchmarks
-type BenchmarkSummary struct {
-	Results []BenchmarkResult
-	Scaling []ScalingAnalysis
-}
-
-// BenchmarkResult stores individual benchmark results
-type BenchmarkResult struct {
-	Count    int
-	Duration time.Duration
-	IsSorted bool
-}
-
-// ScalingAnalysis compares performance between different input sizes
-type ScalingAnalysis struct {
-	FromSize   int
-	ToSize     int
-	SizeRatio  float64
-	TimeRatio  float64
-}
+// Type aliases for convenience
+type BenchmarkSummary = pkg.BenchmarkSummary
+type BenchmarkResult = pkg.BenchmarkResult
+type ScalingAnalysis = pkg.ScalingAnalysis
 
 // ManualSort sorts a manually created list using the specified algorithm
 func (uc *UseCase) ManualSort(algorithmName string, numbers []int) SortResult {
@@ -65,7 +45,7 @@ func (uc *UseCase) ManualSort(algorithmName string, numbers []int) SortResult {
 			Duration:    0,
 			Count:       0,
 			IsSorted:    true,
-			Analysis:    PerformanceAnalysis{},
+			Analysis:    pkg.PerformanceAnalysis{},
 			IsArray:     uc.algorithmUsesArray(algorithmName),
 		}
 	}
@@ -83,8 +63,8 @@ func (uc *UseCase) ManualSort(algorithmName string, numbers []int) SortResult {
 			SortedArray: sortedArray,
 			Duration:    duration,
 			Count:       count,
-			IsSorted:    uc.verifySortedArray(sortedArray),
-			Analysis:    uc.calculateAnalysis(count, duration),
+			IsSorted:    pkg.IsSortedSlice(sortedArray),
+			Analysis:    pkg.CalculateAnalysis(count, duration),
 			IsArray:     true,
 		}
 	} else {
@@ -99,7 +79,7 @@ func (uc *UseCase) ManualSort(algorithmName string, numbers []int) SortResult {
 			Duration:    duration,
 			Count:       count,
 			IsSorted:    uc.verifySorted(sortedList),
-			Analysis:    uc.calculateAnalysis(count, duration),
+			Analysis:    pkg.CalculateAnalysis(count, duration),
 			IsArray:     false,
 		}
 	}
@@ -111,7 +91,7 @@ func (uc *UseCase) CustomRandomSort(algorithmName string, count int) SortResult 
 	
 	if uc.algorithmUsesArray(algorithmName) {
 		// Array-based algorithms
-		numbers := uc.generateRandomSlice(count)
+		numbers := uc.generator.GenerateIntSliceDefault(count)
 		sortedArray := uc.executeSortArray(algorithmName, numbers)
 		duration := time.Since(startTime)
 		
@@ -120,8 +100,8 @@ func (uc *UseCase) CustomRandomSort(algorithmName string, count int) SortResult 
 			SortedArray: sortedArray,
 			Duration:    duration,
 			Count:       count,
-			IsSorted:    uc.verifySortedArray(sortedArray),
-			Analysis:    uc.calculateAnalysis(count, duration),
+			IsSorted:    pkg.IsSortedSlice(sortedArray),
+			Analysis:    pkg.CalculateAnalysis(count, duration),
 			IsArray:     true,
 		}
 	} else {
@@ -136,7 +116,7 @@ func (uc *UseCase) CustomRandomSort(algorithmName string, count int) SortResult 
 			Duration:    duration,
 			Count:       count,
 			IsSorted:    uc.verifySorted(sortedList),
-			Analysis:    uc.calculateAnalysis(count, duration),
+			Analysis:    pkg.CalculateAnalysis(count, duration),
 			IsArray:     false,
 		}
 	}
@@ -161,7 +141,7 @@ func (uc *UseCase) RunAllBenchmarks(algorithmName string) BenchmarkSummary {
 		})
 	}
 
-	scaling := uc.calculateScaling(results)
+	scaling := pkg.CalculateScaling(results)
 
 	return BenchmarkSummary{
 		Results: results,
@@ -242,34 +222,11 @@ func (uc *UseCase) generateRandomList(count int) *merge_sort.Node {
 		return nil
 	}
 
-	rand.Seed(time.Now().UnixNano())
-	head := &merge_sort.Node{Value: rand.Intn(1000) + 1}
-	current := head
-
-	for i := 1; i < count; i++ {
-		newNode := &merge_sort.Node{Value: rand.Intn(1000) + 1}
-		current.Next = newNode
-		current = newNode
-	}
-
-	return head
+	numbers := uc.generator.GenerateIntSliceDefault(count)
+	return uc.createListFromSlice(numbers)
 }
 
-// generateRandomSlice creates a slice with random numbers from 1 to 1000
-func (uc *UseCase) generateRandomSlice(count int) []int {
-	if count <= 0 {
-		return []int{}
-	}
 
-	rand.Seed(time.Now().UnixNano())
-	result := make([]int, count)
-	
-	for i := 0; i < count; i++ {
-		result[i] = rand.Intn(1000) + 1
-	}
-
-	return result
-}
 
 // verifySorted checks if a linked list is correctly sorted
 func (uc *UseCase) verifySorted(head *merge_sort.Node) bool {
@@ -288,56 +245,8 @@ func (uc *UseCase) verifySorted(head *merge_sort.Node) bool {
 	return true
 }
 
-// verifySortedArray checks if an array is correctly sorted
-func (uc *UseCase) verifySortedArray(arr []int) bool {
-	if len(arr) <= 1 {
-		return true
-	}
 
-	for i := 0; i < len(arr)-1; i++ {
-		if arr[i] > arr[i+1] {
-			return false
-		}
-	}
 
-	return true
-}
 
-// calculateAnalysis provides performance analysis based on theoretical complexity
-func (uc *UseCase) calculateAnalysis(count int, duration time.Duration) PerformanceAnalysis {
-	timePerNumber := float64(duration.Nanoseconds()) / float64(count) / 1000.0 // microseconds
-	theoreticalOps := float64(count) * math.Log2(float64(count))
-	timePerOperation := float64(duration.Nanoseconds()) / theoreticalOps
 
-	return PerformanceAnalysis{
-		TimePerNumber:    timePerNumber,
-		TheoreticalOps:   theoreticalOps,
-		TimePerOperation: timePerOperation,
-	}
-}
 
-// calculateScaling analyzes performance scaling between different input sizes
-func (uc *UseCase) calculateScaling(results []BenchmarkResult) []ScalingAnalysis {
-	if len(results) < 2 {
-		return nil
-	}
-
-	scaling := make([]ScalingAnalysis, 0, len(results)-1)
-
-	for i := 1; i < len(results); i++ {
-		prev := results[i-1]
-		curr := results[i]
-
-		sizeRatio := float64(curr.Count) / float64(prev.Count)
-		timeRatio := float64(curr.Duration.Nanoseconds()) / float64(prev.Duration.Nanoseconds())
-
-		scaling = append(scaling, ScalingAnalysis{
-			FromSize:  prev.Count,
-			ToSize:    curr.Count,
-			SizeRatio: sizeRatio,
-			TimeRatio: timeRatio,
-		})
-	}
-
-	return scaling
-}
