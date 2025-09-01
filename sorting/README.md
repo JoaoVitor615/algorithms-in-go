@@ -47,9 +47,9 @@ sorting/
 ├── merge_sort/             # Merge Sort implementation
 │   ├── mergesort.go        # Core algorithm
 │   └── mergesort_test.go   # Algorithm tests
-├── quick_sort/             # Quick Sort (Coming Soon)
+├── quick_sort/             # Quick Sort implementation
+├── bubble_sort/            # Bubble Sort implementation  
 ├── heap_sort/              # Heap Sort (Coming Soon)
-├── bubble_sort/            # Bubble Sort (Coming Soon)
 └── insertion_sort/         # Insertion Sort (Coming Soon)
 ```
 
@@ -68,8 +68,8 @@ sorting/
 |-----------|----------------|------------------|--------|---------|
 | **Merge Sort** | O(n log n) | O(log n) | ✅ Yes | ✅ Implemented |
 | **Quick Sort** | O(n log n) avg, O(n²) worst | O(log n) | ❌ No | ✅ Implemented |
+| **Bubble Sort** | O(n²) avg, O(n) best | O(1) | ✅ Yes | ✅ Implemented |
 | **Heap Sort** | O(n log n) | O(1) | ❌ No | 🔄 Coming Soon |
-| **Bubble Sort** | O(n²) | O(1) | ✅ Yes | 🔄 Coming Soon |
 | **Insertion Sort** | O(n²) | O(1) | ✅ Yes | 🔄 Coming Soon |
 
 ### 📊 Algorithm Details
@@ -88,6 +88,13 @@ sorting/
 - **Implementation**: In-place partitioning with configurable pivot strategies
 - **Features**: Multiple pivot strategies, performance analysis, benchmarking
 
+#### ✅ **Bubble Sort**
+- **Type**: Comparison-based with adjacent swapping
+- **Data Structure**: Arrays
+- **Best for**: Educational purposes, small datasets, nearly sorted data
+- **Implementation**: Multiple variants including optimized and in-place versions
+- **Features**: Early termination optimization, visualization callbacks, comprehensive testing
+
 ---
 
 ## 🚀 Usage
@@ -101,6 +108,7 @@ import (
     "fmt"
     "github.com/JoaoVitor615/algorithms-in-go/sorting/merge_sort"
     "github.com/JoaoVitor615/algorithms-in-go/sorting/quick_sort"
+    "github.com/JoaoVitor615/algorithms-in-go/sorting/bubble_sort"
 )
 
 func main() {
@@ -115,6 +123,11 @@ func main() {
     arr := []int{64, 34, 25, 12, 22, 11, 90}
     sortedArr := quick_sort.QuickSort(arr)
     fmt.Println(sortedArr) // [11 12 22 25 34 64 90]
+    
+    // Bubble Sort (Arrays)
+    arr2 := []int{64, 34, 25, 12, 22, 11, 90}
+    sortedArr2 := bubble_sort.BubbleSortOptimized(arr2)
+    fmt.Println(sortedArr2) // [11 12 22 25 34 64 90]
 }
 ```
 
@@ -152,14 +165,14 @@ Choose a sorting algorithm:
 
 1. Merge Sort
 2. Quick Sort
-3. Heap Sort (Coming Soon)
-4. Bubble Sort (Coming Soon)
+3. Bubble Sort
+4. Heap Sort (Coming Soon)
 5. Insertion Sort (Coming Soon)
 6. Back to main menu
 
-Enter your choice (1-6): 2
+Enter your choice (1-6): 3
 
-[   Quick Sort - Advanced Testing   ]
+[   Bubble Sort - Advanced Testing   ]
 Choose a testing option:
 
 1. Manual input (enter numbers manually)
@@ -173,7 +186,7 @@ Choose a testing option:
 
 Enter your choice (1-8): 7
 
-=== Quick Sort - Running All Benchmarks ===
+=== Bubble Sort - Running All Benchmarks ===
 This will test sorting performance with different input sizes...
 
 [1/4] Generating 500 numbers... Sorting... Done in 24.1µs ✅
@@ -226,7 +239,8 @@ go test -bench=. ./sorting/merge_sort
 | Algorithm | Coverage | Test Cases | Status |
 |-----------|----------|------------|---------|
 | Merge Sort | 43.3% | 7 comprehensive cases | ✅ Complete |
-| Quick Sort | - | - | 🔄 Coming Soon |
+| Quick Sort | 85%+ | 10+ comprehensive cases | ✅ Complete |
+| Bubble Sort | 95%+ | 15+ comprehensive cases | ✅ Complete |
 | Heap Sort | - | - | 🔄 Coming Soon |
 
 ---

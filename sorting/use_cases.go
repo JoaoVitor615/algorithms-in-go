@@ -4,12 +4,13 @@ import (
 	"time"
 
 	"github.com/JoaoVitor615/algorithms-in-go/pkg"
+	"github.com/JoaoVitor615/algorithms-in-go/sorting/bubble_sort"
 	"github.com/JoaoVitor615/algorithms-in-go/sorting/merge_sort"
 	"github.com/JoaoVitor615/algorithms-in-go/sorting/quick_sort"
 )
 
 // UseCase represents the business logic layer for sorting operations
-type UseCase struct{
+type UseCase struct {
 	generator *pkg.RandomGenerator
 }
 
@@ -22,13 +23,13 @@ func NewUseCase() *UseCase {
 
 // SortResult contains the result of a sorting operation
 type SortResult struct {
-	SortedList   *merge_sort.Node // For linked list algorithms
-	SortedArray  []int           // For array algorithms
-	Duration     time.Duration
-	Count        int
-	IsSorted     bool
-	Analysis     pkg.PerformanceAnalysis
-	IsArray      bool             // Flag to indicate if result is array or linked list
+	SortedList  *merge_sort.Node // For linked list algorithms
+	SortedArray []int            // For array algorithms
+	Duration    time.Duration
+	Count       int
+	IsSorted    bool
+	Analysis    pkg.PerformanceAnalysis
+	IsArray     bool // Flag to indicate if result is array or linked list
 }
 
 // Type aliases for convenience
@@ -52,12 +53,12 @@ func (uc *UseCase) ManualSort(algorithmName string, numbers []int) SortResult {
 
 	count := len(numbers)
 	startTime := time.Now()
-	
+
 	if uc.algorithmUsesArray(algorithmName) {
 		// Array-based algorithms
 		sortedArray := uc.executeSortArray(algorithmName, numbers)
 		duration := time.Since(startTime)
-		
+
 		return SortResult{
 			SortedList:  nil,
 			SortedArray: sortedArray,
@@ -88,13 +89,13 @@ func (uc *UseCase) ManualSort(algorithmName string, numbers []int) SortResult {
 // CustomRandomSort generates and sorts a random list of specified size
 func (uc *UseCase) CustomRandomSort(algorithmName string, count int) SortResult {
 	startTime := time.Now()
-	
+
 	if uc.algorithmUsesArray(algorithmName) {
 		// Array-based algorithms
 		numbers := uc.generator.GenerateIntSliceDefault(count)
 		sortedArray := uc.executeSortArray(algorithmName, numbers)
 		duration := time.Since(startTime)
-		
+
 		return SortResult{
 			SortedList:  nil,
 			SortedArray: sortedArray,
@@ -181,6 +182,8 @@ func (uc *UseCase) executeSortArray(algorithmName string, arr []int) []int {
 	switch algorithmName {
 	case "Quick Sort":
 		return quick_sort.QuickSort(arr)
+	case "Bubble Sort":
+		return bubble_sort.BubbleSortOptimized(arr)
 	default:
 		// For future array algorithms, we'll add cases here
 		return quick_sort.QuickSort(arr) // Default fallback
@@ -226,8 +229,6 @@ func (uc *UseCase) generateRandomList(count int) *merge_sort.Node {
 	return uc.createListFromSlice(numbers)
 }
 
-
-
 // verifySorted checks if a linked list is correctly sorted
 func (uc *UseCase) verifySorted(head *merge_sort.Node) bool {
 	if head == nil || head.Next == nil {
@@ -244,9 +245,3 @@ func (uc *UseCase) verifySorted(head *merge_sort.Node) bool {
 
 	return true
 }
-
-
-
-
-
-

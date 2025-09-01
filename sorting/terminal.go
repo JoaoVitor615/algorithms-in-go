@@ -30,11 +30,10 @@ func RunSortingInterface() {
 func (t *Terminal) showSortingMenu() {
 	fmt.Println("\n\n[   Sorting Algorithms - Advanced Testing   ]")
 	fmt.Println("Choose a sorting algorithm:")
-	fmt.Println()
 	fmt.Println("1. Merge Sort")
-	fmt.Println("2. Quick Sort (Coming Soon)")
-	fmt.Println("3. Heap Sort (Coming Soon)")
-	fmt.Println("4. Bubble Sort (Coming Soon)")
+	fmt.Println("2. Quick Sort")
+	fmt.Println("3. Bubble Sort")
+	fmt.Println("4. Heap Sort (Coming Soon)")
 	fmt.Println("5. Insertion Sort (Coming Soon)")
 	fmt.Println("6. Back to main menu")
 	fmt.Println()
@@ -46,7 +45,9 @@ func (t *Terminal) showSortingMenu() {
 		t.showAlgorithmMenu("Merge Sort")
 	case "2":
 		t.showAlgorithmMenu("Quick Sort")
-	case "3", "4", "5":
+	case "3":
+		t.showAlgorithmMenu("Bubble Sort")
+	case "4", "5":
 		fmt.Println("This algorithm is coming soon! Stay tuned. 🚀")
 		t.showSortingMenu()
 	case "6":

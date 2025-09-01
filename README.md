@@ -377,9 +377,7 @@ Permission is hereby granted, free of charge, to any person obtaining a copy...
 
 </div>
 
-### 🎯 Mission
 
-> "Sharing knowledge about algorithms and data structures to help developers grow and build better software solutions."
 
 ### 🚀 Let's Connect!
 
@@ -398,8 +396,5 @@ I'm always excited to discuss algorithms, Go programming, and software engineeri
 
 **Made with ❤️ and lots of ☕ by [JoaoVitor615](https://github.com/JoaoVitor615)**
 
----
-
-<img src="https://github.com/betandr/gophers/blob/master/Gopher.png" alt="Go Gopher" height="300">
 
 </div>
