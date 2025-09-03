@@ -108,6 +108,14 @@ This repository aims to:
 
 </details>
 
+> **What's an unstable sorting algorithm?**
+>
+> An algorithm that's considered unstable means that the algorithm doesn't guarantee the same order of the elements of each sorting.
+>
+> For example, in this array: [1, 1, 2, 3].
+> 
+> An unstable sorting algorithm doesn't guarantee that the ones in the beggining will be always in the same order. Obviously, it just matters in specefic cases where you need to preserve the order of theese elements. 
+
 ---
 
 ## 🛠️ Installation
