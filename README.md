@@ -67,7 +67,7 @@ This repository aims to:
 | **Merge Sort** | O(n log n) | O(n) | ✅ | ✅ Implemented |
 | **Quick Sort** | O(n log n) avg, O(n²) worst | O(log n) | ❌ | ✅ Implemented |
 | Heap Sort | O(n log n) | O(1) | ❌ | 🔄 Coming Soon |
-| Bubble Sort | O(n²) | O(1) | ✅ | 🔄 Coming Soon |
+| Bubble Sort | O(n²) | O(1) | ✅ | ✅ Implemented |
 | Insertion Sort | O(n²) | O(1) | ✅ | 🔄 Coming Soon |
 
 </details>
