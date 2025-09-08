@@ -5,6 +5,7 @@ import (
 
 	"github.com/JoaoVitor615/algorithms-in-go/pkg"
 	"github.com/JoaoVitor615/algorithms-in-go/sorting/bubble_sort"
+	"github.com/JoaoVitor615/algorithms-in-go/sorting/insertion_sort"
 	"github.com/JoaoVitor615/algorithms-in-go/sorting/merge_sort"
 	"github.com/JoaoVitor615/algorithms-in-go/sorting/quick_sort"
 )
@@ -184,6 +185,8 @@ func (uc *UseCase) executeSortArray(algorithmName string, arr []int) []int {
 		return quick_sort.QuickSort(arr)
 	case "Bubble Sort":
 		return bubble_sort.BubbleSortOptimized(arr)
+	case "Insertion Sort":
+		return insertion_sort.InsertionSort(arr)
 	default:
 		// For future array algorithms, we'll add cases here
 		return quick_sort.QuickSort(arr) // Default fallback

@@ -34,7 +34,7 @@ func (t *Terminal) showSortingMenu() {
 	fmt.Println("2. Quick Sort")
 	fmt.Println("3. Bubble Sort")
 	fmt.Println("4. Heap Sort (Coming Soon)")
-	fmt.Println("5. Insertion Sort (Coming Soon)")
+	fmt.Println("5. Insertion Sort")
 	fmt.Println("6. Back to main menu")
 	fmt.Println()
 
@@ -47,9 +47,11 @@ func (t *Terminal) showSortingMenu() {
 		t.showAlgorithmMenu("Quick Sort")
 	case "3":
 		t.showAlgorithmMenu("Bubble Sort")
-	case "4", "5":
+	case "4":
 		fmt.Println("This algorithm is coming soon! Stay tuned. 🚀")
 		t.showSortingMenu()
+	case "5":
+		t.showAlgorithmMenu("Insertion Sort")
 	case "6":
 		return
 	default:
@@ -128,16 +130,16 @@ func (t *Terminal) runManualInput(algorithmName string) {
 
 func (t *Terminal) runCustomRandom(algorithmName string) {
 	pkg.PrintSubHeader(fmt.Sprintf("%s - Custom Random List Mode", algorithmName))
-	
+
 	count := t.input.ReadIntOrDefault("Enter the number of random numbers to generate (1-1,000,000): ", 1, 1000000)
 	if count == -1 {
-		fmt.Printf("Invalid input. Please enter a number between %s and %s.\n", 
+		fmt.Printf("Invalid input. Please enter a number between %s and %s.\n",
 			pkg.FormatNumber(1), pkg.FormatNumber(1000000))
 		return
 	}
 
 	fmt.Printf("\n🎲 Generating %s random numbers...\n", pkg.FormatNumber(count))
-	
+
 	result := t.useCase.CustomRandomSort(algorithmName, count)
 
 	fmt.Printf("📝 Random list with %s numbers generated successfully!\n", pkg.FormatNumber(count))
@@ -149,9 +151,9 @@ func (t *Terminal) runCustomRandom(algorithmName string) {
 
 func (t *Terminal) runBenchmark(algorithmName string, count int) {
 	pkg.PrintSubHeader(fmt.Sprintf("%s Benchmark: %s Random Numbers", algorithmName, pkg.FormatNumber(count)))
-	
+
 	fmt.Printf("🎲 Generating %s random numbers...\n", pkg.FormatNumber(count))
-	
+
 	result := t.useCase.BenchmarkSort(algorithmName, count)
 
 	fmt.Printf("📝 List with %s numbers generated successfully!\n", pkg.FormatNumber(count))
@@ -166,22 +168,18 @@ func (t *Terminal) runAllBenchmarks(algorithmName string) {
 	fmt.Println()
 
 	summary := t.useCase.RunAllBenchmarks(algorithmName)
-	
+
 	for i, result := range summary.Results {
-		fmt.Printf("[%d/%d] Generating %s numbers... Sorting... Done in %v ✅\n", 
+		fmt.Printf("[%d/%d] Generating %s numbers... Sorting... Done in %v ✅\n",
 			i+1, len(summary.Results), pkg.FormatNumber(result.Count), result.Duration)
 	}
 
 	pkg.PrintBenchmarkSummary(summary)
 }
 
-
-
 func (t *Terminal) getMenuChoice(prompt string) string {
 	return t.input.ReadString(prompt)
 }
-
-
 
 func (t *Terminal) askToShowList(result SortResult, count int) {
 	if count <= 50 {
@@ -205,10 +203,6 @@ func (t *Terminal) askToShowList(result SortResult, count int) {
 	}
 }
 
-
-
-
-
 func (t *Terminal) printList(node *merge_sort.Node) {
 	current := node
 	for current != nil {
@@ -220,24 +214,14 @@ func (t *Terminal) printList(node *merge_sort.Node) {
 
 func (t *Terminal) printListPartial(node *merge_sort.Node, maxCount int) {
 	partial := t.useCase.GetListPartial(node, maxCount)
-	
+
 	for _, value := range partial {
 		fmt.Printf("%d -> ", value)
 	}
-	
+
 	if len(partial) == maxCount {
 		fmt.Println("... (and more)")
 	} else {
 		fmt.Println("nil")
 	}
 }
-
-
-
-
-
-
-
-
-
-
