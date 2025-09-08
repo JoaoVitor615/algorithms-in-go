@@ -67,7 +67,7 @@ This repository aims to:
 | **Merge Sort** | O(n log n) | O(n) | ✅ | ✅ Implemented |
 | **Quick Sort** | O(n log n) avg, O(n²) worst | O(log n) | ❌ | ✅ Implemented |
 | Heap Sort | O(n log n) | O(1) | ❌ | 🔄 Coming Soon |
-| Bubble Sort | O(n²) | O(1) | ✅ | 🔄 Coming Soon |
+| Bubble Sort | O(n²) | O(1) | ✅ | ✅ Implemented |
 | Insertion Sort | O(n²) | O(1) | ✅ | 🔄 Coming Soon |
 
 </details>
@@ -107,6 +107,14 @@ This repository aims to:
 | Knapsack Problem | 2D DP | O(nW) | 🔄 Coming Soon |
 
 </details>
+
+> **What's an unstable sorting algorithm?**
+>
+> An algorithm that's considered unstable means that the algorithm doesn't guarantee the same order of the elements of each sorting.
+>
+> For example, in this array: [1, 1, 2, 3].
+> 
+> An unstable sorting algorithm doesn't guarantee that the ones in the beggining will be always in the same order. Obviously, it just matters in specefic cases where you need to preserve the order of theese elements. 
 
 ---
 
